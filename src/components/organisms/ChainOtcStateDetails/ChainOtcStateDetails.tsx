@@ -59,7 +59,7 @@ const ChainOtcStateDetails = ({ otcState }: ChainOtcStateDetailsInput) => {
 
 				{/* + + + + + + + + + + + + +  */}
 				{/* PLUGIN USED */}
-				<Pane width="100%" display="flex" alignItems="center">
+				<div className={styles.plugin}>
 					<Badge color="purple" margin={6}>
 						{otcState.redeemLogicState.typeId}
 					</Badge>
@@ -69,11 +69,11 @@ const ChainOtcStateDetails = ({ otcState }: ChainOtcStateDetailsInput) => {
 					</Tooltip>
 					<div style={{ flex: 1 }} />
 					<ContractStatusBadge status={otcState.getContractStatus()} />
-				</Pane>
+				</div>
 
 				{/* + + + + + + + + + + + + +  */}
 				{/* FUNDED SIDES */}
-				<Pane width="100%" display="flex" justifyContent="center" alignItems="center">
+				<div className={styles.funded}>
 					<Badge color={otcState.isBuyerFunded() ? 'green' : 'red'} margin={6}>
 						{otcState.isBuyerFunded() ? 'Long Funded' : 'Long unfunded'}
 					</Badge>
@@ -83,7 +83,7 @@ const ChainOtcStateDetails = ({ otcState }: ChainOtcStateDetailsInput) => {
 					<Badge color={otcState.isSellerFunded() ? 'green' : 'red'} margin={6}>
 						{otcState.isSellerFunded() ? 'Short Funded' : 'Short unfunded'}
 					</Badge>
-				</Pane>
+				</div>
 				<hr />
 
 				{/* + + + + + + + + + + + + +  */}

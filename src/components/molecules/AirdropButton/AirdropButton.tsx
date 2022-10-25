@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { airdrop } from 'api/dummy-tokens/airdrop';
 import { TxHandlerContext } from 'components/providers/TxHandlerProvider';
-import { Text, CloudDownloadIcon, Spinner, Tooltip } from 'evergreen-ui';
+import { CloudDownloadIcon, Spinner, Tooltip } from 'evergreen-ui';
 import { toast } from 'react-toastify';
 
 const AirdropButton = () => {
@@ -34,9 +34,9 @@ const AirdropButton = () => {
 
 	return (
 		<Tooltip content="Airdrop tokens">
-			<Text onClick={onAirdropClick}>
+			<p onClick={onAirdropClick}>
 				<CloudDownloadIcon /> Airdrop
-			</Text>
+			</p>
 		</Tooltip>
 	);
 };

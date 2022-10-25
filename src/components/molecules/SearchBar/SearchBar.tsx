@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { PublicKey } from '@solana/web3.js';
 import cn from 'classnames';
-import { Pane, Text, SearchIcon, ErrorIcon } from 'evergreen-ui';
+import { SearchIcon, ErrorIcon } from 'evergreen-ui';
 import { useRouter } from 'next/router';
 import * as UrlBuilder from 'utils/urlBuilder';
 
@@ -40,7 +40,7 @@ const SearchBar = ({ searchState, className }: SearchBarProps) => {
 
 	return (
 		<div className={cn(styles.wrapper, className)}>
-			<Pane>
+			<div>
 				<div className={cn(hasError && styles.error_border, styles.input_outter)}>
 					<SearchIcon className={styles.adorsement} />
 					<input
@@ -54,12 +54,12 @@ const SearchBar = ({ searchState, className }: SearchBarProps) => {
 					/>
 				</div>
 
-				<Text className={cn(styles.error, !hasError ? styles.hidden : styles.visible)}>
+				<p className={cn(styles.error, !hasError ? styles.hidden : styles.visible)}>
 					{' '}
 					<ErrorIcon />
 					Invalid Public Key
-				</Text>
-			</Pane>
+				</p>
+			</div>
 		</div>
 	);
 };

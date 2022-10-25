@@ -1,4 +1,6 @@
-import { Pane, TextInputField, Button } from 'evergreen-ui';
+import { TextInputField, Button } from 'evergreen-ui';
+
+import styles from './AmountPicker.module.scss';
 
 type AmountPickerInput = {
 	// title of input component
@@ -32,7 +34,7 @@ const AmountPicker = ({ title, value, onChange, resetValue, incrementValues }: A
 	incrementValues = incrementValues ?? [100, -100];
 
 	return (
-		<Pane display="flex" alignItems="center" margin={12}>
+		<div className={styles.wrapper}>
 			<TextInputField
 				label={title}
 				type="number"
@@ -62,7 +64,7 @@ const AmountPicker = ({ title, value, onChange, resetValue, incrementValues }: A
 			>
 				{getDisplayString(incrementValues[1])}
 			</Button>
-		</Pane>
+		</div>
 	);
 };
 

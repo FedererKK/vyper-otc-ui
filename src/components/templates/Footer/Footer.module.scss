@@ -3,4 +3,8 @@
 	// Keeps the footer visible in the Home page
 	position: relative;
 	z-index: 1;
+
+	div {
+		margin: var(--space-20);
+	}
 }

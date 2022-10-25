@@ -64,3 +64,16 @@
 .notionHelp:hover {
 	cursor: pointer;
 }
+
+.plugin {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.funded {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

@@ -8,20 +8,7 @@ import AirdropButton from 'components/molecules/AirdropButton';
 import SelectWallet from 'components/organisms/SelectWallet';
 import { getCurrentCluster } from 'components/providers/OtcConnectionProvider';
 import resources from 'configs/resources.json';
-import {
-	Text,
-	Pane,
-	Heading,
-	StackedChartIcon,
-	CubeAddIcon,
-	GridViewIcon,
-	ChevronDownIcon,
-	Tooltip,
-	Popover,
-	Position,
-	PathSearchIcon,
-	Badge
-} from 'evergreen-ui';
+import { Heading, StackedChartIcon, CubeAddIcon, GridViewIcon, ChevronDownIcon, Tooltip, Popover, Position, PathSearchIcon, Badge } from 'evergreen-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as UrlBuilder from 'utils/urlBuilder';
@@ -57,7 +44,7 @@ const TopBar = () => {
 
 	return (
 		<>
-			<Pane className={styles.topbar}>
+			<div className={styles.topbar}>
 				<div className={styles.navLeftItems}>
 					<Link href={UrlBuilder.buildHomeUrl()}>
 						<Heading size={600} className={styles.hover}>
@@ -66,7 +53,7 @@ const TopBar = () => {
 					</Link>
 				</div>
 
-				<Pane className={styles.nav}>
+				<div className={styles.nav}>
 					{/* HOME LINK */}
 					<div className={navigation[0].current ? cn(styles.item, styles.active) : cn(styles.item)}>
 						<Link href={UrlBuilder.buildHomeUrl()}>
@@ -101,39 +88,39 @@ const TopBar = () => {
 						}}
 						position={Position.BOTTOM}
 						content={
-							<Pane className={styles.container}>
+							<div className={styles.container}>
 								{resources.socialMedias.map((item) => {
 									return (
 										<a key={item.name} className={styles.item} href={item.link} target="_blank" rel="noopener noreferrer">
 											<Icon name={item.icon as AvailableIconNames} />
-											<Text>{item.name}</Text>
+											<p>{item.name}</p>
 										</a>
 									);
 								})}
-							</Pane>
+							</div>
 						}
 					>
 						<div className={styles.item}>
-							<Text>
+							<p>
 								<GridViewIcon /> More <ChevronDownIcon />
-							</Text>
+							</p>
 						</div>
 					</Popover>
 
 					<div className={cn(styles.item, cluster !== 'devnet' && styles.hidden)}>
 						<AirdropButton />
 					</div>
-				</Pane>
+				</div>
 
-				<Pane className={styles.navRightItems} display="flex" alignItems="center">
+				<div className={styles.navRightItems}>
 					{cluster !== 'mainnet-beta' && (
 						<Badge color="orange" marginRight={10}>
 							{cluster}
 						</Badge>
 					)}
 					<SelectWallet />
-				</Pane>
-			</Pane>
+				</div>
+			</div>
 		</>
 	);
 };

@@ -2,7 +2,6 @@ import { ReactNode, useState } from 'react';
 
 import SearchBar from 'components/molecules/SearchBar';
 import TopBar from 'components/organisms/TopBar';
-import { Pane } from 'evergreen-ui';
 import Head from 'next/head';
 import Image, { StaticImageData } from 'next/image';
 
@@ -19,7 +18,7 @@ const Layout = ({ children, withSearch, withBackgroundImage }: LayoutProps) => {
 	const [searchValue, setSearchValue] = useState('');
 
 	return (
-		<Pane>
+		<div>
 			<Head>
 				<title>Vyper OTC</title>
 				<link rel="icon" href="/favicon.ico" />
@@ -36,7 +35,7 @@ const Layout = ({ children, withSearch, withBackgroundImage }: LayoutProps) => {
 				<main className={styles.main}>{children}</main>
 				<Footer />
 			</div>
-		</Pane>
+		</div>
 	);
 };
 
