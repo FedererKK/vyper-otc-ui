@@ -1,15 +1,29 @@
 import { useState } from 'react';
-import { Box, Autocomplete, TextField, Grid, Typography, Alert, Fab } from '@mui/material';
+
 import SearchIcon from '@mui/icons-material/Search';
+import { Box, Autocomplete, TextField, Grid, Typography, Alert, Fab } from '@mui/material';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { getExplorerLink } from '@vyper-protocol/explorer-link-helper';
 import { getCurrentCluster } from 'components/providers/OtcConnectionProvider';
+import { useOracleLivePrice } from 'hooks/useOracleLivePrice';
 import { OracleDetail } from 'models/OracleDetail';
 import { RedeemLogicPluginTypeIds } from 'models/plugins/AbsPlugin';
-import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
 import { RatePythPlugin } from 'models/plugins/rate/RatePythPlugin';
 import RateSwitchboardPlugin from 'models/plugins/rate/RateSwitchboardPlugin';
+import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
+import { AbsRatePlugin } from 'models/plugins/rate/AbsRatePlugin';
+
+type OracleDetailInput = {
+	// rate plugin object
+	ratePlugin: OracleDetail;
+
+	// set callback, sets the rate plugin
+	// eslint-disable-next-line no-unused-vars
+	setRatePlugin: (rate: OracleDetail) => void;
+
+	oracles: OracleDetail[];
+};
 
 export type OraclesPickerInput = {
 	// main rate plugin object
@@ -30,11 +44,23 @@ export type OraclesPickerInput = {
 	redeemLogicPluginType: RedeemLogicPluginTypeIds;
 };
 
-const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }) => {
+const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput) => {
 	const { connection } = useConnection();
 	const currentCluster = getCurrentCluster();
 	const [value, setValue] = useState<string | OracleDetail>('');
 	const [label, setLabel] = useState(<></>);
+
+	// let livePriceAccounts: AbsRatePlugin = ratePlugin.type ==='pyth' ? RatePythPlugin.livePri
+	// RatePythPlugin.li
+
+	// const {
+	// 	pricesValue: livePricesValue,
+	// 	isInitialized: livePriceIsInitialized,
+	// 	removeListener
+	// } = useOracleLivePrice(
+	// 	ratePlugin.type,
+	// 	otcState.rateState.livePriceAccounts.map((c) => c.toBase58())
+	// );
 
 	async function getOracleInfo(oracle: string): Promise<['pyth' | 'switchboard', string]> {
 		let publicKey;
@@ -75,7 +101,7 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }) => {
 							pubkey: oracle,
 							title: symbol,
 							explorerUrl: getExplorerLink(oracle, { explorer: 'solscan', type: 'account', cluster: currentCluster })
-						});
+						} as OracleDetail);
 						setLabel(
 							<Box sx={{ paddingX: '16px', paddingY: '6px' }}>
 								<Typography component="span">{symbol}</Typography>
@@ -93,7 +119,7 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }) => {
 					}
 					setValue(oracle);
 				}}
-				getOptionLabel={(oracle: string | OracleDetail) => typeof oracle === 'string' ? oracle : oracle.title}
+				getOptionLabel={(oracle: string | OracleDetail) => (typeof oracle === 'string' ? oracle : oracle.title)}
 				renderOption={(props, option: OracleDetail) => (
 					<Box component="li" {...props}>
 						<Typography align="left">{option.title}</Typography>
@@ -103,10 +129,12 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }) => {
 					</Box>
 				)}
 				options={oracles}
-				renderInput={(params) => <>
-					<TextField {...params} label="Oracle #1" />
-					{label}
-				</>}
+				renderInput={(params) => (
+					<>
+						<TextField {...params} label="Oracle #1" />
+						{label}
+					</>
+				)}
 				onChange={async (_, oracle: OracleDetail | string) => {
 					if (typeof oracle === 'object') {
 						setRatePlugin(oracle);
