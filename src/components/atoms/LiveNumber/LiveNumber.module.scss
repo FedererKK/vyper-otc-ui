@@ -1,0 +1,17 @@
+.container {
+	-moz-transition: all 0.2s ease-in;
+	-o-transition: all 0.2s ease-in;
+	-webkit-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+	color: black;
+	display: inline-flex;
+	padding: 10px;
+
+	.up {
+		background-color: #59e7789f;
+	}
+
+	.down {
+		background-color: #e4354c9f;
+	}
+}

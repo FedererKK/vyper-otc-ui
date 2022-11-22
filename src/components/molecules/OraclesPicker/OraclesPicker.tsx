@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Autocomplete, TextField, Grid, Typography, Alert, Fab } from '@mui/material';
@@ -11,8 +11,9 @@ import { OracleDetail } from 'models/OracleDetail';
 import { RedeemLogicPluginTypeIds } from 'models/plugins/AbsPlugin';
 import { RatePythPlugin } from 'models/plugins/rate/RatePythPlugin';
 import RateSwitchboardPlugin from 'models/plugins/rate/RateSwitchboardPlugin';
+import { formatWithDecimalDigits } from 'utils/numberHelpers';
 import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
-import { AbsRatePlugin } from 'models/plugins/rate/AbsRatePlugin';
+import LiveNumber from 'components/atoms/LiveNumber';
 
 type OracleDetailInput = {
 	// rate plugin object
@@ -50,18 +51,6 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 	const [value, setValue] = useState<string | OracleDetail>('');
 	const [label, setLabel] = useState(<></>);
 
-	// let livePriceAccounts: AbsRatePlugin = ratePlugin.type ==='pyth' ? RatePythPlugin.livePri
-	// RatePythPlugin.li
-
-	// const {
-	// 	pricesValue: livePricesValue,
-	// 	isInitialized: livePriceIsInitialized,
-	// 	removeListener
-	// } = useOracleLivePrice(
-	// 	ratePlugin.type,
-	// 	otcState.rateState.livePriceAccounts.map((c) => c.toBase58())
-	// );
-
 	async function getOracleInfo(oracle: string): Promise<['pyth' | 'switchboard', string]> {
 		let publicKey;
 		try {
@@ -79,6 +68,9 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 		return [undefined, undefined];
 	}
 
+	const { pricesValue, isInitialized, removeListener } = useOracleLivePrice(ratePlugin.type, [ratePlugin.pubkey], ratePlugin);
+	// formatWithDecimalDigits(pricesValue[0], 8)
+
 	return (
 		<>
 			<Autocomplete
@@ -92,7 +84,6 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 				value={value}
 				onInputChange={async (_, oracle: string, reason: string) => {
 					if (reason !== 'input') return;
-
 					const [ratePluginType, symbol] = await getOracleInfo(oracle);
 					if (ratePluginType) {
 						setRatePlugin({
@@ -148,6 +139,14 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 					<SearchIcon />
 				</a>
 			</Fab>
+
+			<div>
+				<Typography variant="button" component={'span'}>
+					Live price
+				</Typography>{' '}
+				{/* {isInitialized && <LiveNumber value={formatWithDecimalDigits(pricesValue[0], 8)} />} */}
+				{isInitialized && <LiveNumber value={pricesValue[0]} />}
+			</div>
 		</>
 	);
 };

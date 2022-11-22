@@ -12,7 +12,8 @@ import { getMultipleAccountsInfo } from 'utils/multipleAccountHelper';
 
 export const useOracleLivePrice = (
 	oracleType: RatePluginTypeIds,
-	pubkeys: string[]
+	pubkeys: string[],
+	addTrigger: any
 ): { pricesValue: number[]; isInitialized: boolean; removeListener: () => void } => {
 	const [pricesValue, setPricesValue] = useState<number[]>([]);
 	const [isInitialized, setIsInitialized] = useState(false);
@@ -50,7 +51,7 @@ export const useOracleLivePrice = (
 			setIsInitialized(true);
 		};
 		fetchData();
-	}, [accountsToWatch, connection, decodeAccountInfo]);
+	}, [accountsToWatch, connection, decodeAccountInfo, addTrigger]);
 
 	// listen for account changes
 	useEffect(() => {
@@ -80,7 +81,7 @@ export const useOracleLivePrice = (
 		return () => {
 			subscriptionIds.map((c) => connection.removeAccountChangeListener(c));
 		};
-	}, [accountsToWatch, connection, decodeAccountInfo, isInitialized, oracleType, pricesValue]);
+	}, [accountsToWatch, connection, decodeAccountInfo, isInitialized, oracleType, pricesValue, addTrigger]);
 
 	return { pricesValue, isInitialized, removeListener };
 };
