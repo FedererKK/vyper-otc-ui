@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Autocomplete, TextField, Grid, Typography, Alert, Fab } from '@mui/material';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { getExplorerLink } from '@vyper-protocol/explorer-link-helper';
-import { getCurrentCluster } from 'components/providers/OtcConnectionProvider';
-import { useOracleLivePrice } from 'hooks/useOracleLivePrice';
-import { OracleDetail } from 'models/OracleDetail';
-import { RedeemLogicPluginTypeIds } from 'models/plugins/AbsPlugin';
-import { RatePythPlugin } from 'models/plugins/rate/RatePythPlugin';
-import RateSwitchboardPlugin from 'models/plugins/rate/RateSwitchboardPlugin';
-import { formatWithDecimalDigits } from 'utils/numberHelpers';
-import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
-import LiveNumber from 'components/atoms/LiveNumber';
+// import LiveNumber from 'components/atoms/LiveNumber';
 import OracleLivePrice from 'components/organisms/OracleLivePrice';
+import { getCurrentCluster } from 'components/providers/OtcConnectionProvider';
+// import { useOracleLivePrice } from 'hooks/useOracleLivePrice';
+import { OracleDetail } from 'models/OracleDetail';
+import { RatePythState } from 'models/plugins/rate/RatePythState';
+import { RateSwitchboardState } from 'models/plugins/rate/RateSwitchboardState';
+import { RLPluginTypeIds } from 'models/plugins/redeemLogic/RLStateType';
+import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
 
 type OracleDetailInput = {
 	// rate plugin object
@@ -43,7 +42,7 @@ export type OraclesPickerInput = {
 	setRatePlugin2: (rate: OracleDetail) => void;
 
 	// redeem logic plugin of the contract
-	redeemLogicPluginType: RedeemLogicPluginTypeIds;
+	redeemLogicPluginType: RLPluginTypeIds;
 };
 
 const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput) => {
@@ -60,10 +59,10 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 			return [undefined, undefined];
 		}
 
-		let result: any = await RatePythPlugin.GetProductPrice(connection, currentCluster, publicKey);
+		let result: any = await RatePythState.GetProductPrice(connection, currentCluster, publicKey);
 		if (result[0]) return ['pyth', result[0].symbol];
 
-		result = await RateSwitchboardPlugin.LoadAggregatorData(connection, publicKey);
+		result = await RateSwitchboardState.LoadAggregatorData(connection, publicKey);
 		if (result) return ['switchboard', String.fromCharCode(...result.name)];
 
 		return [undefined, undefined];
@@ -157,7 +156,7 @@ export const OraclesPicker = ({ ratePlugin1, setRatePlugin1, ratePlugin2, setRat
 					<OraclePicker ratePlugin={ratePlugin1} setRatePlugin={setRatePlugin1} oracles={getOracles()} />
 				</Grid>
 				<Grid item xs={6}>
-					{(redeemLogicPluginType as RedeemLogicPluginTypeIds) === 'settled_forward' && (
+					{(redeemLogicPluginType as RLPluginTypeIds) === 'settled_forward' && (
 						<OraclePicker ratePlugin={ratePlugin2} setRatePlugin={setRatePlugin2} oracles={getOraclesByType(ratePlugin1.type)} />
 					)}
 				</Grid>
