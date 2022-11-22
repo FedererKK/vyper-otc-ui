@@ -14,6 +14,7 @@ import RateSwitchboardPlugin from 'models/plugins/rate/RateSwitchboardPlugin';
 import { formatWithDecimalDigits } from 'utils/numberHelpers';
 import { getOracles, getOraclesByType } from 'utils/oracleDatasetHelper';
 import LiveNumber from 'components/atoms/LiveNumber';
+import OracleLivePrice from 'components/organisms/OracleLivePrice';
 
 type OracleDetailInput = {
 	// rate plugin object
@@ -67,9 +68,6 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 
 		return [undefined, undefined];
 	}
-
-	const { pricesValue, isInitialized, removeListener } = useOracleLivePrice(ratePlugin.type, [ratePlugin.pubkey], ratePlugin);
-	// formatWithDecimalDigits(pricesValue[0], 8)
 
 	return (
 		<>
@@ -144,8 +142,7 @@ const OraclePicker = ({ ratePlugin, setRatePlugin, oracles }: OracleDetailInput)
 				<Typography variant="button" component={'span'}>
 					Live price
 				</Typography>{' '}
-				{/* {isInitialized && <LiveNumber value={formatWithDecimalDigits(pricesValue[0], 8)} />} */}
-				{isInitialized && <LiveNumber value={pricesValue[0]} />}
+				<OracleLivePrice oracleType={ratePlugin.type} pubkey={ratePlugin.pubkey} />
 			</div>
 		</>
 	);
