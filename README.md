@@ -41,6 +41,12 @@ Create an optmized build
 yarn build
 ```
 
+Analyze bundle
+
+```bash
+yarn analyze
+```
+
 ### NPM Scripts
 
 | Script          | Use                                                                                             |
