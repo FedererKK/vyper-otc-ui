@@ -129,12 +129,12 @@ const CreateGoldContractPage = () => {
 						>
 							On this page, you are creating a 1-month contract on the price of XAU (gold). <br></br>
 							<b>Steps required:</b> <br></br>
-							1) Have a wallet like Phantom or Solflare <br></br>
+							1) Have a Solana wallet like Phantom or Solflare <br></br>
 							2) Be on devnet and have <a href="https://solfaucet.com/">some SOL</a> in your wallet <br></br>
-							3) Connect wallet and request airdrop of devUSD <br></br>
-							4) Initiate the contract clicking <i>Create contract</i> <br></br>
+							3) Connect wallet and request airdrop of fake USDC, your counterparty will need them too! <br></br>
+							4) Initiate the contract by clicking <i>Create contract</i> <br></br>
 							5) Share the contract URL with your counterparty <br></br>
-							6) Your and your counterparty will deposit the collateral and the trade is done <br></br>
+							6) Both parties will deposit the collateral and the trade is started <br></br>
 						</Alert>
 					</Collapse>
 					<Box
@@ -157,7 +157,7 @@ const CreateGoldContractPage = () => {
 						</Button> */}
 					</Grid>
 					<div>
-						<h6>LIVE PRICE: ${pricesValue[0] ? pricesValue[0].toFixed(4) : 0}</h6>
+						<h6>LIVE PRICE: ${pricesValue[0] ? pricesValue[0].toFixed(4) : 'Loading..'}</h6>
 					</div>
 					{/* {process.env.NODE_ENV === 'development' && (
 						<FormGroup>
