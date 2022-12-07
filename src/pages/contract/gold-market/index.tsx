@@ -2,7 +2,8 @@
 import { useContext, useState } from 'react';
 import React from 'react';
 
-import { Alert, AlertTitle, Box, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, AlertTitle, Box, Button, CircularProgress, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { AnchorProvider } from '@project-serum/anchor';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 // import { Connection } from '@solana/web3.js';
@@ -36,10 +37,10 @@ const CreateGoldContractPage = () => {
 
 	const { pricesValue, isInitialized } = useOracleLivePrice('pyth', [asset]);
 
-	const ButtonClickUpdateAsset = async (pubkey: string) => {
-		// setAsset(pubkey);
-		setStrike(pricesValue[0]);
-	};
+	// const ButtonClickUpdateAsset = async (pubkey: string) => {
+	//  setAsset(pubkey);
+	// 	setStrike(pricesValue[0]);
+	// };
 
 	const [strike, setStrike] = useState(pricesValue[0]);
 
@@ -48,6 +49,8 @@ const CreateGoldContractPage = () => {
 	const handleChange = (panel) => (event, isExpanded) => {
 		setExpanded(isExpanded ? panel : false);
 	};
+
+	const [open, setOpen] = React.useState(true);
 
 	const onCreateContractButtonClick = async () => {
 		try {
@@ -60,7 +63,7 @@ const CreateGoldContractPage = () => {
 
 			const redeemLogicOption: OtcInitializationParams['redeemLogicOption'] = {
 				redeemLogicPluginType: 'forward',
-				strike: strike,
+				strike: pricesValue[0],
 				notional: 1,
 				isStandard: true,
 				isLinear: true
@@ -89,6 +92,9 @@ const CreateGoldContractPage = () => {
 			// create contract
 			const otcPublicKey = await createContract(provider, txHandler, initParams);
 
+			// dump log in console
+			console.log(initParams);
+
 			// Create contract URL
 			router.push(UrlBuilder.buildContractSummaryUrl(otcPublicKey.toBase58()));
 		} catch (err) {
@@ -104,6 +110,33 @@ const CreateGoldContractPage = () => {
 			<Box>
 				<Stack spacing={2} direction="column" justifyContent="center" alignItems="center">
 					<h1>DeFi Gold marketplace</h1>
+					<Collapse in={open}>
+						<Alert
+							severity="info"
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => {
+										setOpen(false);
+									}}
+								>
+									<CloseIcon fontSize="inherit" />
+								</IconButton>
+							}
+							sx={{ mb: 2 }}
+						>
+							On this page, you are creating a 1-month contract on the price of XAU (gold). <br></br>
+							<b>Steps required:</b> <br></br>
+							1) Have a wallet like Phantom or Solflare <br></br>
+							2) Be on devnet and have <a href="https://solfaucet.com/">some SOL</a> in your wallet <br></br>
+							3) Connect wallet and request airdrop of devUSD <br></br>
+							4) Initiate the contract clicking <i>Create contract</i> <br></br>
+							5) Share the contract URL with your counterparty <br></br>
+							6) Your and your counterparty will deposit the collateral and the trade is done <br></br>
+						</Alert>
+					</Collapse>
 					<Box
 						component="img"
 						sx={{
@@ -116,15 +149,16 @@ const CreateGoldContractPage = () => {
 						src="/gold-img.png"
 					/>
 					<Grid container spacing={2} justifyContent="center" alignItems="center">
-						<Button variant="outlined" onClick={() => ButtonClickUpdateAsset(PUBKEY_ASSET_ONE)}>
+						{/* <Button variant="outlined" onClick={() => ButtonClickUpdateAsset(PUBKEY_ASSET_ONE)}>
 							GOLD
-						</Button>
+						</Button> */}
 						{/* <Button variant="outlined" onClick={() => ButtonClickUpdateAsset(PUBKEY_ASSET_TWO)}>
 							BTC
 						</Button> */}
 					</Grid>
-					<div>${pricesValue[0]}</div>
-
+					<div>
+						<h6>LIVE PRICE: ${pricesValue[0] ? pricesValue[0].toFixed(4) : 0}</h6>
+					</div>
 					{/* {process.env.NODE_ENV === 'development' && (
 						<FormGroup>
 							<FormControlLabel
@@ -137,22 +171,20 @@ const CreateGoldContractPage = () => {
 							/>
 						</FormGroup>
 					)} */}
-
+					<br></br>
+					This will deploy the contract on DEVNET with fake USDC.
 					<Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
 						{isLoading ? (
 							<CircularProgress />
 						) : (
-							<Button variant="outlined" disabled={!wallet.connected} onClick={onCreateContractButtonClick}>
-								{wallet.connected ? 'Create Contract 🔥🚀' : 'Connect wallet'}
+							<Button variant="contained" disabled={!wallet.connected} onClick={onCreateContractButtonClick}>
+								{wallet.connected ? 'Create trade 🔥🚀' : 'Connect wallet'}
 							</Button>
 						)}
 
-						<Typography>
-							This will deploy the contract on <b>DEVNET</b> with fake USDC.
-						</Typography>
+						{/* <Typography></Typography> */}
 					</Stack>
 					<hr />
-
 					<Alert sx={{ maxWidth: '800px' }} severity="info" variant="outlined">
 						<AlertTitle>Why would you buy gold?</AlertTitle>
 						<Typography>
