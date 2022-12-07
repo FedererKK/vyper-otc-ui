@@ -1,13 +1,11 @@
 /* eslint-disable no-console */
 import { useContext, useState } from 'react';
+import React from 'react';
 
 import { Alert, AlertTitle, Box, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import { AnchorProvider } from '@project-serum/anchor';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Connection } from '@solana/web3.js';
+// import { Connection } from '@solana/web3.js';
 import { getCurrentCluster } from 'components/providers/OtcConnectionProvider';
 import { TxHandlerContext } from 'components/providers/TxHandlerProvider';
 import Layout from 'components/templates/Layout';
@@ -44,6 +42,12 @@ const CreateGoldContractPage = () => {
 	};
 
 	const [strike, setStrike] = useState(pricesValue[0]);
+
+	const [expanded, setExpanded] = React.useState(false);
+
+	const handleChange = (panel) => (event, isExpanded) => {
+		setExpanded(isExpanded ? panel : false);
+	};
 
 	const onCreateContractButtonClick = async () => {
 		try {
