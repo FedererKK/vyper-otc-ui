@@ -45,22 +45,22 @@ const TopBar = () => {
 	const menuItems = (
 		<>
 			{/* HOME LINK */}
-			<div className={navigation[0].current ? cn(styles.item, styles.active) : cn(styles.item)}>
+			{/* <div className={navigation[0].current ? cn(styles.item, styles.active) : cn(styles.item)}>
 				<Link href={UrlBuilder.buildHomeUrl()}>
 					<a>
 						<MdStackedBarChart size="20px" /> Home
 					</a>
 				</Link>
-			</div>
+			</div> */}
 
 			{/* CREATE CONTRACT LINK */}
-			<div className={navigation[1].current ? cn(styles.item, styles.active) : cn(styles.item)}>
+			{/* <div className={navigation[1].current ? cn(styles.item, styles.active) : cn(styles.item)}>
 				<Link href={UrlBuilder.buildCreateContractUrl()}>
 					<a>
 						<HiFolderAdd size="20px" /> Create contract
 					</a>
 				</Link>
-			</div>
+			</div> */}
 
 			{/* EXPLORER LINK */}
 			<div className={navigation[2].current ? cn(styles.item, styles.active) : cn(styles.item)}>
@@ -123,8 +123,8 @@ const TopBar = () => {
 				<div className={styles.navLeftItems}>
 					<Link href={UrlBuilder.buildHomeUrl()}>
 						<a>
-							<Typography component="h2" variant="h6" sx={{ fontWeight: 600, fontSize: '1.15rem', fontFamily: 'monospace' }} className={styles.hover}>
-								Vyper OTC
+							<Typography component="h2" variant="h6" sx={{ fontWeight: 600, fontSize: '1rem', fontFamily: 'monospace' }} className={styles.hover}>
+								Powered by Vyper OTC
 							</Typography>
 						</a>
 					</Link>

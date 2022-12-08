@@ -15,6 +15,7 @@ import { OtcInitializationParams } from 'controllers/createContract/OtcInitializ
 import { useOracleLivePrice } from 'hooks/useOracleLivePrice';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import { getOracleByPubkey } from 'utils/oracleDatasetHelper';
 import * as UrlBuilder from 'utils/urlBuilder';
 
 const CreateGoldContractPage = () => {
@@ -27,30 +28,23 @@ const CreateGoldContractPage = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const [saveOnDatabase, setSaveOnDatabase] = useState(true);
-	const [sendNotification, setSendNotification] = useState(true);
+	const saveOnDatabase = false;
+	const sendNotification = false;
 
+	// pyth pubkey of the asset to be used
 	const PUBKEY_ASSET_ONE = '4GqTjGm686yihQ1m1YdTsSvfm4mNfadv6xskzgCYWNC5';
 	// const PUBKEY_ASSET_TWO = 'HovQMDrbAgAYPCmHVSrezcSmkMtXSSUsLDFANExrZh2J';
 
-	const [asset, setAsset] = useState(PUBKEY_ASSET_ONE);
-
+	// setting the asset to be used and initialized by the oracle
+	const asset = PUBKEY_ASSET_ONE;
 	const { pricesValue, isInitialized } = useOracleLivePrice('pyth', [asset]);
+	const oracleData = getOracleByPubkey(asset);
 
-	// const ButtonClickUpdateAsset = async (pubkey: string) => {
-	//  setAsset(pubkey);
-	// 	setStrike(pricesValue[0]);
-	// };
-
-	const [strike, setStrike] = useState(pricesValue[0]);
-
-	const [expanded, setExpanded] = React.useState(false);
-
-	const handleChange = (panel) => (event, isExpanded) => {
-		setExpanded(isExpanded ? panel : false);
-	};
-
+	// generate the URL for the orderbook
+	const orderbookUrl = '/explorer?underlying=' + oracleData['baseCurrency'] + '%2F' + oracleData['quoteCurrency'] + '+eq&page=1&limit=25';
+	// for Accordion
 	const [open, setOpen] = React.useState(true);
+	// const [expanded, setExpanded] = React.useState(false);
 
 	const onCreateContractButtonClick = async () => {
 		try {
@@ -143,7 +137,7 @@ const CreateGoldContractPage = () => {
 							// height: 233,
 							// width: 350,
 							// maxHeight: { xs: 233, md: 167 },
-							maxWidth: { xs: 650, md: 400 }
+							maxWidth: { xs: 600, md: 400 }
 						}}
 						alt="gold-img"
 						src="/gold-img.png"
@@ -159,20 +153,8 @@ const CreateGoldContractPage = () => {
 					<div>
 						<h6>LIVE PRICE: ${pricesValue[0] ? pricesValue[0].toFixed(4) : 'Loading..'}</h6>
 					</div>
-					{/* {process.env.NODE_ENV === 'development' && (
-						<FormGroup>
-							<FormControlLabel
-								control={<Switch defaultChecked checked={saveOnDatabase} onChange={(e) => setSaveOnDatabase(e.target.checked)} />}
-								label="Save on database"
-							/>
-							<FormControlLabel
-								control={<Switch defaultChecked checked={sendNotification} onChange={(e) => setSendNotification(e.target.checked)} />}
-								label="Send notification"
-							/>
-						</FormGroup>
-					)} */}
 					<br></br>
-					This will deploy the contract on DEVNET with fake USDC.
+					This will deploy the contract on DEVNET with $100 fake USDC.
 					<Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
 						{isLoading ? (
 							<CircularProgress />
@@ -181,10 +163,15 @@ const CreateGoldContractPage = () => {
 								{wallet.connected ? 'Create trade 🔥🚀' : 'Connect wallet'}
 							</Button>
 						)}
-
-						{/* <Typography></Typography> */}
 					</Stack>
 					<hr />
+					<br></br>
+					Or check the contracts deployed by others here:
+					<Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+						<Button variant="contained" onClick={() => router.push(orderbookUrl)}>
+							ORDERBOOK 📖💰
+						</Button>
+					</Stack>
 					<Alert sx={{ maxWidth: '800px' }} severity="info" variant="outlined">
 						<AlertTitle>Why would you buy gold?</AlertTitle>
 						<Typography>
