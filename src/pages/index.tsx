@@ -165,13 +165,13 @@ const CreateGoldContractPage = () => {
 						)}
 					</Stack>
 					<hr />
-					<br></br>
+					{/* <br></br>
 					Or check the contracts deployed by others here:
 					<Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
 						<Button variant="contained" onClick={() => router.push(orderbookUrl)}>
 							ORDERBOOK 📖💰
 						</Button>
-					</Stack>
+					</Stack> */}
 					<Alert sx={{ maxWidth: '800px' }} severity="info" variant="outlined">
 						<AlertTitle>Why would you buy gold?</AlertTitle>
 						<Typography>

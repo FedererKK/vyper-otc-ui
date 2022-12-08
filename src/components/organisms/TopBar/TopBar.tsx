@@ -45,13 +45,13 @@ const TopBar = () => {
 	const menuItems = (
 		<>
 			{/* HOME LINK */}
-			{/* <div className={navigation[0].current ? cn(styles.item, styles.active) : cn(styles.item)}>
+			<div className={navigation[0].current ? cn(styles.item, styles.active) : cn(styles.item)}>
 				<Link href={UrlBuilder.buildHomeUrl()}>
 					<a>
 						<MdStackedBarChart size="20px" /> Home
 					</a>
 				</Link>
-			</div> */}
+			</div>
 
 			{/* CREATE CONTRACT LINK */}
 			{/* <div className={navigation[1].current ? cn(styles.item, styles.active) : cn(styles.item)}>
@@ -63,13 +63,13 @@ const TopBar = () => {
 			</div> */}
 
 			{/* EXPLORER LINK */}
-			<div className={navigation[2].current ? cn(styles.item, styles.active) : cn(styles.item)}>
+			{/* <div className={navigation[2].current ? cn(styles.item, styles.active) : cn(styles.item)}>
 				<Link href={UrlBuilder.buildExplorerUrl()}>
 					<a>
 						<TbMapSearch size="20px" /> Explorer
 					</a>
 				</Link>
-			</div>
+			</div> */}
 
 			{/* SOCIALS */}
 			<div className={styles.item} onClick={openSocialsMenu}>

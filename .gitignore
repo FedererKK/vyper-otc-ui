@@ -40,7 +40,7 @@ jspm_packages
 .DS_Store
 
 # env files
-.env.local
+# .env
 
 # Webstorm
 .idea
