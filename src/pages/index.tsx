@@ -31,20 +31,19 @@ const CreateGoldContractPage = () => {
 	const saveOnDatabase = false;
 	const sendNotification = false;
 
-	// pyth pubkey of the asset to be used
+	// oracle to be used, 'pyth' and 'switchboard' are available
+	const oracle = 'pyth';
+	// pubkey of the asset to be used from the above oracle
 	const PUBKEY_ASSET_ONE = '4GqTjGm686yihQ1m1YdTsSvfm4mNfadv6xskzgCYWNC5';
-	// const PUBKEY_ASSET_TWO = 'HovQMDrbAgAYPCmHVSrezcSmkMtXSSUsLDFANExrZh2J';
 
-	// setting the asset to be used and initialized by the oracle
+	// setting the asset to be used and initialized by the oracle, this is equal to
 	const asset = PUBKEY_ASSET_ONE;
-	const { pricesValue, isInitialized } = useOracleLivePrice('pyth', [asset]);
-	const oracleData = getOracleByPubkey(asset);
 
-	// generate the URL for the orderbook
-	const orderbookUrl = '/explorer?underlying=' + oracleData['baseCurrency'] + '%2F' + oracleData['quoteCurrency'] + '+eq&page=1&limit=25';
+	const { pricesValue, isInitialized } = useOracleLivePrice(oracle, [asset]);
+	// const oracleData = getOracleByPubkey(asset);
+
 	// for Accordion
 	const [open, setOpen] = React.useState(true);
-	// const [expanded, setExpanded] = React.useState(false);
 
 	const onCreateContractButtonClick = async () => {
 		try {
@@ -75,7 +74,7 @@ const CreateGoldContractPage = () => {
 				seniorDepositAmount: 100,
 				juniorDepositAmount: 100,
 				rateOption: {
-					ratePluginType: 'pyth',
+					ratePluginType: oracle,
 					rateAccounts: [asset]
 				},
 				redeemLogicOption,
@@ -165,13 +164,6 @@ const CreateGoldContractPage = () => {
 						)}
 					</Stack>
 					<hr />
-					{/* <br></br>
-					Or check the contracts deployed by others here:
-					<Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-						<Button variant="contained" onClick={() => router.push(orderbookUrl)}>
-							ORDERBOOK 📖💰
-						</Button>
-					</Stack> */}
 					<Alert sx={{ maxWidth: '800px' }} severity="info" variant="outlined">
 						<AlertTitle>Why would you buy gold?</AlertTitle>
 						<Typography>
